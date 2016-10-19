@@ -1,0 +1,21 @@
+{
+  "name": "newscrawler",
+  "version": "1.0.0",
+  "description": "news crawler",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "crawler",
+    "news"
+  ],
+  "author": "yohanes.gultom@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "log4js": "^0.6.38",
+    "nedb": "^1.8.0",
+    "request": "^2.75.0"
+  }
+}
