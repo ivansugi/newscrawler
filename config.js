@@ -5,7 +5,7 @@ module.exports = {
         script: "kompas.js",
         output: "kompas.txt",
         log: "kompas.error",
-        pages: 5
+        pages: 10
     },
     detik: {
         name: "detik",

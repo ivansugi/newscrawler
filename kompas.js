@@ -8,19 +8,20 @@ var config = require('./config'),
   Datastore = require('nedb'),
   log4js = require('log4js'),
   indexdb = new Datastore({ filename: config.db, autoload: true }),
-  url = 'http://indeks.kompas.com/indeks/headline'
+  url = 'http://indeks.kompas.com'
 
 // logging
 log4js.loadAppender('file')
 log4js.addAppender(log4js.appenders.file(config.kompas.log), config.kompas.name)
 var logger = log4js.getLogger(config.kompas.name)
-logger.setLevel('ERROR')
+logger.setLevel('DEBUG')
 
 // dispatch number of threads async
 for (var i = 1; i <= config.kompas.pages; i++) {
   var indexUrl = url + '?p=' + i
   getTargetsFromIndex(indexUrl).then(function(args) {
     var targets = args[0]
+    logger.debug(targets.length)
     targets.forEach(function (url) {
       // retrieve article if not yet
       // exist in index db
@@ -46,9 +47,9 @@ function getTargetsFromIndex(url) {
       } else {
         var $ = cheerio.load(html),
             targets = []
-        $('#headline h3').each(function(){
+        $('h3 a').each(function(){
           var data = $(this),
-              url = data.children().first().attr('href')
+              url = data.attr('href')
           targets.push(url)
         })
         resolve([targets])
