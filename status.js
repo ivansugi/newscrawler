@@ -24,8 +24,8 @@ indexdb.count({}, function (err, count) {
                         reject(err)
                     } else {
                         if (stdout && stdout.length > 0) {
-                            [lines, words, file] = stdout.trim().split(' ')
-                            var s = {name: config[key]['name'], lines: lines, words: words, file:file}
+                            stdout = stdout.trim().split(' ')
+                            var s = {name: config[key]['name'], lines: stdout[0], words: stdout[1], file:stdout[2]}
                             resolve(s)
                         }
                     }
