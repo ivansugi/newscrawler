@@ -23,5 +23,6 @@ Run crawler
 ```
 $ node kompas.js
 $ node detik.js
+$ node cnnindonesia.js
 ```
 Configure scripts output, log and database name in `config.js`
