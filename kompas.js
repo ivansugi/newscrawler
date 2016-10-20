@@ -14,7 +14,7 @@ var config = require('./config'),
 log4js.loadAppender('file')
 log4js.addAppender(log4js.appenders.file(config.kompas.log), config.kompas.name)
 var logger = log4js.getLogger(config.kompas.name)
-logger.setLevel('DEBUG')
+logger.setLevel('ERROR')
 
 // dispatch number of threads async
 for (var i = 1; i <= config.kompas.pages; i++) {
