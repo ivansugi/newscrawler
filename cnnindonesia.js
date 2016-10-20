@@ -1,4 +1,4 @@
-// Crawl and scrap kompas.com headlines
+// Crawl and scrap cnnindonesia.com.com headlines
 // yohanes.gultom@gmail.com
 
 var config = require('./config'),
@@ -8,12 +8,12 @@ cheerio = require('cheerio'),
 Datastore = require('nedb'),
 log4js = require('log4js'),
 indexdb = new Datastore({ filename: config.db, autoload: true }),
-url = 'http://news.detik.com/indeks'
+url = 'http://www.cnnindonesia.com/'
 
 // logging
 log4js.loadAppender('file')
-log4js.addAppender(log4js.appenders.file(config.detik.log), config.detik.name)
-var logger = log4js.getLogger(config.detik.name)
+log4js.addAppender(log4js.appenders.file(config.cnnindonesia.log), config.cnnindonesia.name)
+var logger = log4js.getLogger(config.cnnindonesia.name)
 logger.setLevel('ERROR')
 
 getTargetsFromIndex(url).then(function(args) {
@@ -44,10 +44,10 @@ function getTargetsFromIndex(url) {
                 var $ = cheerio.load(html),
                 targets = []
                 // custom
-                $('div.desc_idx a').each(function(){
+                $('a[data-label="List Berita"]').each(function(){
                     var data = $(this),
                     url = data.attr('href')
-                    targets.push('http:' + url)
+                    targets.push(url)
                 })
                 resolve([targets])
             }
@@ -63,16 +63,17 @@ function saveArticle(url) {
             } else {
                 // extract title and content
                 var $ = cheerio.load(html),
-                rawTitle = $('div.jdl h1').first().text(),
-                rawContent = $('div.detail_text').first()
+                rawTitle = $('h1[itemprop="name"]').first().text(),
+                rawContent = $('#detail')
+                var title = rawTitle.trim()
+                logger.debug(title)
                 // remove known tags
                 $('script', rawContent).remove()
                 $('table', rawContent).remove()
                 $('div', rawContent).remove()
                 rawContent = rawContent.html()
-
-                var title = rawTitle.trim()
                 var content = cleanArticle(rawContent)
+                logger.debug(content)
                 // only proceed if not empty
                 if (title && content) {
                     // save url and title to db as index
@@ -82,7 +83,7 @@ function saveArticle(url) {
                             reject(err)
                         } else {
                             // save title and content to output file
-                            fs.appendFile(config.detik.output, title + '\n' + content + '\n\n', function (err) {
+                            fs.appendFile(config.cnnindonesia.output, title + '\n' + content + '\n\n', function (err) {
                                 if (err) {
                                     reject(err)
                                 } else {
@@ -102,13 +103,16 @@ function saveArticle(url) {
 function cleanArticle(html) {
     try {
         // clean author sign
-        html = html.replace(/<strong>\([\w/]+\)<\/strong>/gi, '')
+        html = html.replace(/<b>\([\w/]+\)<\/b>/gi, '')
         // clean source tags
         html = html.replace(/<[^<>]+>/gi, '')
         // clean encoded ascii
         html = html.replace(/&[#\d\w]+;/gi, ' ')
         // trailing whitespaces
         html = html.replace(/\s\s+/gi, ' ')
+        //Jakarta, CNN Indonesia --
+        // <!--// -->
+        html = html.replace(/Jakarta, CNN Indonesia -- | <!--\/\/ -->/gi, '')
         return html.trim()
     } catch (err) {
         logger.error('Failed to clean: ' + err)

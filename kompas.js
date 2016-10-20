@@ -7,7 +7,7 @@ var config = require('./config'),
   cheerio = require('cheerio'),
   Datastore = require('nedb'),
   log4js = require('log4js'),
-  indexdb = new Datastore({ filename: config.   db, autoload: true }),
+  indexdb = new Datastore({ filename: config.db, autoload: true }),
   url = 'http://indeks.kompas.com/indeks/headline'
 
 // logging

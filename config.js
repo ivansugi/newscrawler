@@ -12,5 +12,11 @@ module.exports = {
         script: "detik.js",
         output: "detik.txt",
         log: "detik.error"
+    },
+    cnnindonesia: {
+        name: "cnnindonesia",
+        script: "cnnindonesia.js",
+        output: "cnnindonesia.txt",
+        log: "cnnindonesia.error"
     }
 }
