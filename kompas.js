@@ -1,4 +1,4 @@
-// Crawl and scrap kompas.com headlines
+// Crawl and scrap detik.com headlines
 // yohanes.gultom@gmail.com
 
 var config = require('./config'),

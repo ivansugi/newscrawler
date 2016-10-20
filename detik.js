@@ -14,7 +14,7 @@ url = 'http://news.detik.com/indeks'
 log4js.loadAppender('file')
 log4js.addAppender(log4js.appenders.file(config.detik.log), config.detik.name)
 var logger = log4js.getLogger(config.detik.name)
-logger.setLevel('DEBUG')
+logger.setLevel('ERROR')
 
 getTargetsFromIndex(url).then(function(args) {
     var targets = args[0]
