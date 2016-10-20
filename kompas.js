@@ -1,23 +1,23 @@
-var DBPATH = 'index',
-  OUTPUT = 'kompas.txt',
-  ERROR = 'kompas.error'
-  NUMPAGE = 5
+// Crawl and scrap kompas.com headlines
+// yohanes.gultom@gmail.com
 
-var fs = require('fs'),
+var config = require('./config'),
+  fs = require('fs'),
   request = require('request'),
   cheerio = require('cheerio'),
   Datastore = require('nedb'),
   log4js = require('log4js'),
-  indexdb = new Datastore({ filename: DBPATH, autoload: true }),
+  indexdb = new Datastore({ filename: config.   db, autoload: true }),
   url = 'http://indeks.kompas.com/indeks/headline'
 
 // logging
 log4js.loadAppender('file')
-log4js.addAppender(log4js.appenders.file(ERROR), 'kompas')
-var logger = log4js.getLogger('kompas')
+log4js.addAppender(log4js.appenders.file(config.kompas.log), config.kompas.name)
+var logger = log4js.getLogger(config.kompas.name)
 logger.setLevel('ERROR')
 
-for (var i = 1; i <= NUMPAGE; i++) {
+// dispatch number of threads async
+for (var i = 1; i <= config.kompas.pages; i++) {
   var indexUrl = url + '?p=' + i
   getTargetsFromIndex(indexUrl).then(function(args) {
     var targets = args[0]
@@ -79,7 +79,7 @@ function saveArticle(url) {
               reject(err)
             } else {
               // save title and content to output file
-              fs.appendFile(OUTPUT, title + '\n' + content + '\n\n', function (err) {
+              fs.appendFile(config.kompas.output, title + '\n' + content + '\n\n', function (err) {
                 if (err) {
                   reject(err)
                 } else {

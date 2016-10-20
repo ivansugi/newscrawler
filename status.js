@@ -1,7 +1,6 @@
-var DBPATH = 'index',
-    OUTPUT = ['kompas.txt'],
+var config = require('./config'),
     Datastore = require('nedb'),
-    indexdb = new Datastore({ filename: DBPATH, autoload: true }),
+    indexdb = new Datastore({ filename: config.db, autoload: true }),
     exec = require('child_process').exec
 
 indexdb.count({}, function (err, count) {
@@ -10,10 +9,12 @@ indexdb.count({}, function (err, count) {
   // count lines and words
   console.log('Lines Words File')
   console.log('----- ----- ----')
-  OUTPUT.forEach(function (o) {
-      exec('wc -lc ' + o, function (err, stdout, stderr) {
-          if (err) stdout = err
-          console.log(stdout)
-      })
-  })
+  for (var key in config) {
+      if (typeof config[key] == 'object' && 'output' in config[key]) {
+          exec('wc -lc ' + config[key]['output'], function (err, stdout, stderr) {
+              if (err) stdout = err
+              console.log(stdout)
+          })
+      }
+  }
 })
