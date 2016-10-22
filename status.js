@@ -58,10 +58,10 @@ function render(status, format) {
             console.log(s.file + ' consists of ' + s.lines + ' lines and ' + s.words + ' words')
             console.log('</li>')
         })
+        console.log('</ul>')
         console.log('<p>')
         console.log(status.time)
         console.log('</p>')
-        console.log('</ul>')
         console.log('</body>')
         console.log('</html>')
     } else {
