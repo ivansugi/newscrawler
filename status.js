@@ -1,7 +1,8 @@
 var config = require('./config'),
-Datastore = require('nedb'),
-indexdb = new Datastore({ filename: config.db, autoload: true }),
-exec = require('child_process').exec
+    Datastore = require('nedb'),
+    moment = require('moment'),
+    indexdb = new Datastore({ filename: config.db, autoload: true }),
+    exec = require('child_process').exec
 
 // handle format option
 var format = null
@@ -42,6 +43,7 @@ indexdb.count({}, function (err, count) {
 })
 
 function render(status, format) {
+    status.time = moment().format('LLLL')
     if ('--json' == format) {
         console.log(status)
     } else if ('--html' == format) {
@@ -56,6 +58,9 @@ function render(status, format) {
             console.log(s.file + ' consists of ' + s.lines + ' lines and ' + s.words + ' words')
             console.log('</li>')
         })
+        console.log('<p>')
+        console.log(status.time)
+        console.log('</p>')
         console.log('</ul>')
         console.log('</body>')
         console.log('</html>')
@@ -64,5 +69,6 @@ function render(status, format) {
         status.details.forEach(function(s) {
             console.log('* ' + s.file + ' consists of ' + s.lines + ' lines and ' + s.words + ' words')
         })
+        console.log(status.time)
     }
 }
