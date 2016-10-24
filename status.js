@@ -42,6 +42,10 @@ indexdb.count({}, function (err, count) {
     })
 })
 
+function formatNumber(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 function render(status, format) {
     status.time = moment().format('LLLL')
     if ('--json' == format) {
@@ -50,12 +54,12 @@ function render(status, format) {
         console.log('<html>')
         console.log('<body>')
         console.log('<p>')
-        console.log('We currently have ' + status.totalArticles + ' article(s)')
+        console.log('We currently have ' + formatNumber(status.totalArticles) + ' article(s)')
         console.log('</p>')
         console.log('<ul>')
         status.details.forEach(function(s) {
             console.log('<li>')
-            console.log(s.file + ' consists of ' + s.lines + ' lines and ' + s.words + ' words')
+            console.log(s.file + ' consists of ' + formatNumber(s.lines) + ' lines and ' + formatNumber(s.words) + ' words')
             console.log('</li>')
         })
         console.log('</ul>')
@@ -65,9 +69,9 @@ function render(status, format) {
         console.log('</body>')
         console.log('</html>')
     } else {
-        console.log('We currently have ' + status.totalArticles + ' article(s)')
+        console.log('We currently have ' + formatNumber(status.totalArticles) + ' article(s)')
         status.details.forEach(function(s) {
-            console.log('* ' + s.file + ' consists of ' + s.lines + ' lines and ' + s.words + ' words')
+            console.log('* ' + s.file + ' consists of ' + formatNumber(s.lines) + ' lines and ' + formatNumber(s.words) + ' words')
         })
         console.log(status.time)
     }
